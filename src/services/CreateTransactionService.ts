@@ -16,10 +16,12 @@ class CreateTransactionService {
   }
 
   public execute({ title, value, type }: Reques): Transaction {
+    // verifica se o tipo da transação é valido
     if (!['income', 'outcome'].includes(type)) {
       throw new Error('Transacion type is invalid');
     }
 
+    // verifica se a retirada e possivel, com base no saldo disponivel
     const { total } = this.transactionsRepository.getBalance();
     if (type === 'outcome' && total < value) {
       throw new Error('You do not have enough balance');
